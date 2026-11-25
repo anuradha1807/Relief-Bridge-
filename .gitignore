@@ -22,7 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+<<<<<<< HEAD
 
+=======
+>>>>>>> f333bb66b7a2f6ec459f2ff17a0a1a6ae6528fca
 # Spring Boot backend
 backend/src/main/resources/application.properties
 backend/target/
