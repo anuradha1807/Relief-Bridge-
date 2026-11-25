@@ -1,0 +1,353 @@
+### 1. Create a campaign (Demo account)
+POST http://localhost:8080/api/campaign
+Content-Type: application/json
+Authorization: Basic bWU6MTIz
+
+{
+  "title": "Flood Relief Campaign",
+  "description": "Providing food, clean water and essential supplies to flood-affected families.",
+  "location": "Maharashtra, India",
+  "targetAmount": 500000.00,
+  "amountRaised": 0.00,
+  "status": "ACTIVE"
+}
+
+
+### 2. Get all campaigns (Demo account)
+GET http://localhost:8080/api/campaign
+Authorization: Basic bWU6MTIz
+
+
+### 3. Get campaign by ID (Demo account)
+GET http://localhost:8080/api/campaign/1
+Authorization: Basic bWU6MTIz
+
+
+### 4. Get campaign count (Demo account)
+GET http://localhost:8080/api/campaign/count
+Authorization: Basic bWU6MTIz
+
+
+### 5. Admin: Get all campaigns
+GET http://localhost:8080/api/campaign
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+
+
+### 6. NGO: Get campaigns
+GET http://localhost:8080/api/campaign
+Authorization: Basic bmdvOm5nbzEyMw==
+
+
+### 7. NGO: Create campaign
+POST http://localhost:8080/api/campaign
+Authorization: Basic bmdvOm5nbzEyMw==
+Content-Type: application/json
+
+{
+  "title": "NGO Food Distribution",
+  "description": "Food distribution for affected families.",
+  "location": "Nagpur, Maharashtra",
+  "targetAmount": 200000,
+  "amountRaised": 0,
+  "status": "ACTIVE"
+}
+
+
+### 8. NGO: Update own campaign
+PUT http://localhost:8080/api/campaign/10
+Authorization: Basic bmdvOm5nbzEyMw==
+Content-Type: application/json
+
+{
+  "title": "Updated NGO Food Distribution",
+  "description": "Updated campaign description",
+  "location": "Nagpur",
+  "targetAmount": 250000,
+  "amountRaised": 50000,
+  "status": "ACTIVE"
+}
+
+### 9. NGO: Delete own campaign
+DELETE http://localhost:8080/api/campaign/10
+Authorization: Basic bmdvOm5nbzEyMw==
+
+
+### 10. Demo: Create campaign for ownership test
+POST http://localhost:8080/api/campaign
+Authorization: Basic bWU6MTIz
+Content-Type: application/json
+
+{
+  "title": "Ownership Protection Test",
+  "description": "Testing campaign ownership security.",
+  "location": "Pune",
+  "targetAmount": 100000,
+  "amountRaised": 0,
+  "status": "ACTIVE"
+}
+
+
+### 11. NGO: Try updating another user's campaign
+PUT http://localhost:8080/api/campaign/11
+Authorization: Basic bmdvOm5nbzEyMw==
+Content-Type: application/json
+
+{
+  "title": "Unauthorized Update Attempt",
+  "description": "This update should be blocked.",
+  "location": "Pune",
+  "targetAmount": 200000,
+  "amountRaised": 0,
+  "status": "ACTIVE"
+}
+
+
+### 12. NGO: Try deleting another user's campaign
+DELETE http://localhost:8080/api/campaign/11
+Authorization: Basic bmdvOm5nbzEyMw==
+
+
+### 13. NGO: Create campaign for admin testing
+POST http://localhost:8080/api/campaign
+Authorization: Basic bmdvOm5nbzEyMw==
+Content-Type: application/json
+
+{
+  "title": "Admin Permission Test",
+  "description": "Testing admin campaign management.",
+  "location": "Pune",
+  "targetAmount": 150000,
+  "amountRaised": 0,
+  "status": "ACTIVE"
+}
+
+
+### 14. Admin: Update NGO campaign
+PUT http://localhost:8080/api/campaign/12
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+Content-Type: application/json
+
+{
+  "title": "Admin Updated NGO Campaign",
+  "description": "Campaign updated by administrator.",
+  "location": "Pune, Maharashtra",
+  "targetAmount": 200000,
+  "amountRaised": 25000,
+  "status": "ACTIVE"
+}
+
+
+### 15. Admin: Delete NGO campaign
+DELETE http://localhost:8080/api/campaign/12
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+
+### Test campaign validation - invalid title and amount
+POST http://localhost:8080/api/campaign
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+Content-Type: application/json
+
+{
+  "title": "",
+  "description": "Testing validation",
+  "location": "Pune",
+  "targetAmount": 0,
+  "amountRaised": 0,
+  "status": "ACTIVE"
+}
+
+
+### Test fundraising amount validation
+POST http://localhost:8080/api/campaign
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+Content-Type: application/json
+
+{
+  "title": "Validation Test Campaign",
+  "description": "Testing fundraising amount limit",
+  "location": "Pune",
+  "targetAmount": 1000,
+  "amountRaised": 1500,
+  "status": "ACTIVE"
+}
+
+### Test global validation error handler
+POST http://localhost:8080/api/campaign
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+Content-Type: application/json
+
+{
+  "title": "",
+  "description": "Testing validation",
+  "location": "Pune",
+  "targetAmount": 0,
+  "amountRaised": 0,
+  "status": "ACTIVE"
+}
+
+
+### Test automatic campaign completion
+POST http://localhost:8080/api/campaign
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+Content-Type: application/json
+
+{
+  "title": "Automatic Completion Test",
+  "description": "Testing automatic campaign status",
+  "location": "Pune",
+  "targetAmount": 1000,
+  "amountRaised": 1000,
+  "status": "ACTIVE"
+}
+
+
+### Test completed campaign protection
+PUT http://localhost:8080/api/campaign/13
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+Content-Type: application/json
+
+{
+  "title": "Automatic Completion Test",
+  "description": "Testing completed campaign protection",
+  "location": "Pune",
+  "targetAmount": 1000,
+  "amountRaised": 900,
+  "status": "ACTIVE"
+}
+
+
+### Test campaign cancellation
+POST http://localhost:8080/api/campaign
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+Content-Type: application/json
+
+{
+  "title": "Campaign Cancellation Test",
+  "description": "Testing campaign cancellation status.",
+  "location": "Pune",
+  "targetAmount": 5000,
+  "amountRaised": 1000,
+  "status": "CANCELLED"
+}
+
+
+### Test cancelled campaign protection
+PUT http://localhost:8080/api/campaign/15
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+Content-Type: application/json
+
+{
+  "title": "Campaign Cancellation Test",
+  "description": "Testing cancelled campaign protection.",
+  "location": "Pune",
+  "targetAmount": 5000,
+  "amountRaised": 2000,
+  "status": "ACTIVE"
+}
+
+### Search campaigns by title
+GET http://localhost:8080/api/campaign/search?title=Campaign
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+
+### Search campaigns by location
+GET http://localhost:8080/api/campaign/search?location=Pune
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+
+### Filter active campaigns
+GET http://localhost:8080/api/campaign/search?status=ACTIVE
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+
+### Search by title and location
+GET http://localhost:8080/api/campaign/search?title=Campaign&location=Pune
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+
+### NGO searches its own campaign
+GET http://localhost:8080/api/campaign/search?title=NGO%20Food%20Distribution
+Authorization: Basic bmdvOm5nbzEyMw==
+
+### Get all campaigns created by NGO
+GET http://localhost:8080/api/campaign
+Authorization: Basic bmdvOm5nbzEyMw==
+
+### Search campaigns by location
+GET http://localhost:8080/api/campaign/search?location=Nagpur
+Authorization: Basic bmdvOm5nbzEyMw==
+
+### Filter active campaigns
+GET http://localhost:8080/api/campaign/search?status=ACTIVE
+Authorization: Basic bmdvOm5nbzEyMw==
+
+### Filter completed campaigns
+GET http://localhost:8080/api/campaign/search?status=COMPLETED
+Authorization: Basic bmdvOm5nbzEyMw==
+
+### Test automatic campaign completion
+POST http://localhost:8080/api/campaign
+Authorization: Basic bmdvOm5nbzEyMw==
+Content-Type: application/json
+
+{
+  "title": "Automatic Completion Test",
+  "description": "Testing automatic campaign completion.",
+  "location": "Pune",
+  "targetAmount": 5000,
+  "amountRaised": 5000,
+  "status": "ACTIVE"
+}
+
+### Test completed campaign protection
+PUT http://localhost:8080/api/campaign/16
+Authorization: Basic bmdvOm5nbzEyMw==
+Content-Type: application/json
+
+{
+  "title": "Trying to Update Completed Campaign",
+  "description": "This update should be rejected.",
+  "location": "Pune",
+  "targetAmount": 5000,
+  "amountRaised": 5000,
+  "status": "ACTIVE"
+}
+
+### Create cancelled campaign
+POST http://localhost:8080/api/campaign
+Authorization: Basic bmdvOm5nbzEyMw==
+Content-Type: application/json
+
+{
+  "title": "Cancellation Protection Test",
+  "description": "Testing cancelled campaign protection.",
+  "location": "Pune",
+  "targetAmount": 5000,
+  "amountRaised": 1000,
+  "status": "CANCELLED"
+}
+
+### Test cancelled campaign protection
+PUT http://localhost:8080/api/campaign/17
+Authorization: Basic bmdvOm5nbzEyMw==
+Content-Type: application/json
+
+{
+  "title": "Trying to Update Cancelled Campaign",
+  "description": "This update should be blocked.",
+  "location": "Pune",
+  "targetAmount": 5000,
+  "amountRaised": 2000,
+  "status": "ACTIVE"
+}
+
+### NGO deletes its own cancelled campaign
+DELETE http://localhost:8080/api/campaign/17
+Authorization: Basic bmdvOm5nbzEyMw==
+
+### Search campaigns by title
+GET http://localhost:8080/api/campaign/search?title=Food
+Authorization: Basic bmdvOm5nbzEyMw==
+
+### Search campaigns using multiple filters
+GET http://localhost:8080/api/campaign/search?title=Food&location=Nagpur&status=ACTIVE
+Authorization: Basic bmdvOm5nbzEyMw==
+
+### Search for a campaign that does not exist
+GET http://localhost:8080/api/campaign/search?title=XYZ123NOTFOUND
+Authorization: Basic bmdvOm5nbzEyMw==

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReliefBridge | Campaign Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #e0f2fe, #eef2ff, #dcfce7);
+            color: #17324d;
+        }
+
+        header {
+            background: #123b5d;
+            color: white;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 12px #0002;
+        }
+
+        .brand {
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+        .tagline {
+            font-size: 13px;
+            color: #c7e5f8;
+            margin-top: 4px;
+        }
+
+        .status {
+            background: #dcfce7;
+            color: #166534;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        main {
+            max-width: 1150px;
+            margin: auto;
+            padding: 45px 20px;
+        }
+
+        .heading {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .heading h1 {
+            color: #123b5d;
+            font-size: 34px;
+        }
+
+        .heading p {
+            color: #64748b;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .campaign-count {
+            font-weight: 700;
+            color: #123b5d;
+        }
+
+        .refresh-btn, .details-btn {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 18px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .refresh-btn {
+            background: #123b5d;
+            color: white;
+        }
+
+        .refresh-btn:hover {
+            background: #1e527b;
+        }
+
+        .refresh-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .campaign-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .campaign-card {
+            background: white;
+            padding: 28px;
+            border-radius: 18px;
+            box-shadow: 0 12px 35px #17324d1c;
+            border: 1px solid #e2e8f0;
+        }
+
+        .campaign-card h2 {
+            color: #123b5d;
+            font-size: 21px;
+        }
+
+        .description {
+            color: #64748b;
+            line-height: 1.6;
+            min-height: 65px;
+        }
+
+        .location {
+            color: #475569;
+            font-size: 14px;
+            margin: 15px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #dcfce7;
+            color: #166534;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .amount {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 22px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .progress {
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 20px;
+            margin-top: 12px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #16a34a;
+            border-radius: 20px;
+            transition: width 0.5s ease;
+        }
+
+        .percentage {
+            color: #16805d;
+            font-weight: bold;
+        }
+
+        .details-btn {
+            background: #e0f2fe;
+            color: #123b5d;
+            margin-top: 12px;
+            width: 100%;
+        }
+
+        .details-btn:hover {
+            background: #bae6fd;
+        }
+
+        .extra-details {
+            display: none;
+            background: #f1f5f9;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .extra-details.show {
+            display: block;
+        }
+
+        .message {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            color: #64748b;
+            grid-column: 1 / -1;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #52677c;
+            font-size: 13px;
+        }
+
+        @media(max-width: 480px) {
+            header {
+                padding: 18px;
+                gap: 10px;
+            }
+
+            .brand {
+                font-size: 21px;
+            }
+
+            .heading h1 {
+                font-size: 27px;
+            }
+
+            .amount {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div>
+        <div class="brand">ReliefBridge</div>
+        <div class="tagline">
+            Connecting help with those in need
+        </div>
+    </div>
+
+    <div class="status">● System Active</div>
+</header>
+
+<main>
+
+    <section class="heading">
+        <h1>Campaign Dashboard</h1>
+        <p>Explore active relief campaigns and their funding progress.</p>
+    </section>
+
+    <section class="toolbar">
+        <div class="campaign-count" id="campaignCount">
+            Loading campaigns...
+        </div>
+
+        <button class="refresh-btn" id="refreshBtn"
+                onclick="loadCampaigns()">
+            ↻ Refresh Campaigns
+        </button>
+    </section>
+
+    <section class="campaign-grid" id="campaignList">
+        <div class="message">Loading campaigns...</div>
+    </section>
+
+</main>
+
+<footer>
+    © 2026 ReliefBridge · Building stronger, safer communities
+</footer>
+
+<script>
+
+    const API_URL = "/api/campaign";
+
+    // Demo authentication for local development.
+    // Never expose credentials in production frontend code.
+    const AUTH_HEADER = "Basic bWU6MTIz";
+
+    async function loadCampaigns() {
+
+        const campaignList = document.getElementById("campaignList");
+        const campaignCount = document.getElementById("campaignCount");
+        const refreshBtn = document.getElementById("refreshBtn");
+
+        refreshBtn.disabled = true;
+        refreshBtn.textContent = "Refreshing...";
+
+        try {
+
+            const response = await fetch(API_URL, {
+                method: "GET",
+                headers: {
+                    "Authorization": AUTH_HEADER
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(
+                    "Unable to load campaigns. HTTP " + response.status
+                );
+            }
+
+            const campaigns = await response.json();
+
+            campaignList.innerHTML = "";
+
+            campaignCount.textContent =
+                "Total Campaigns: " + campaigns.length;
+
+            if (!campaigns || campaigns.length === 0) {
+
+                campaignList.innerHTML =
+                    '<div class="message">No campaigns available currently.</div>';
+
+                return;
+            }
+
+            campaigns.forEach(campaign => {
+
+                const target = Number(campaign.targetAmount) || 0;
+                const raised = Number(campaign.amountRaised) || 0;
+
+                const percentage = target > 0
+                    ? Math.min((raised / target) * 100, 100)
+                    : 0;
+
+                const card = document.createElement("article");
+                card.className = "campaign-card";
+
+                const title = document.createElement("h2");
+                title.textContent =
+                    campaign.title || "Untitled Campaign";
+
+                const description = document.createElement("p");
+                description.className = "description";
+                description.textContent =
+                    campaign.description || "No description available.";
+
+                const location = document.createElement("div");
+                location.className = "location";
+                location.textContent =
+                    "📍 " + (campaign.location || "Location unavailable");
+
+                const badge = document.createElement("span");
+                badge.className = "badge";
+                badge.textContent = campaign.status || "UNKNOWN";
+
+                const amount = document.createElement("div");
+                amount.className = "amount";
+
+                const raisedText = document.createElement("span");
+                raisedText.textContent =
+                    "Raised: ₹" + raised.toLocaleString("en-IN");
+
+                const targetText = document.createElement("span");
+                targetText.textContent =
+                    "Goal: ₹" + target.toLocaleString("en-IN");
+
+                amount.append(raisedText, targetText);
+
+                const progress = document.createElement("div");
+                progress.className = "progress";
+
+                const progressBar = document.createElement("div");
+                progressBar.className = "progress-bar";
+                progressBar.style.width = percentage + "%";
+
+                progress.appendChild(progressBar);
+
+                const percentageText = document.createElement("p");
+                percentageText.className = "percentage";
+                percentageText.textContent =
+                    percentage.toFixed(1) + "% funded";
+
+                const detailsBtn = document.createElement("button");
+                detailsBtn.className = "details-btn";
+                detailsBtn.textContent = "View Details";
+
+                const extraDetails = document.createElement("div");
+                extraDetails.className = "extra-details";
+
+                const details = [
+                    ["Campaign ID", campaign.id],
+                    ["Location", campaign.location],
+                    ["Status", campaign.status],
+                    ["Target Amount", "₹" + target.toLocaleString("en-IN")],
+                    ["Amount Raised", "₹" + raised.toLocaleString("en-IN")],
+                    ["Created At", campaign.createdAt]
+                ];
+
+                details.forEach(([label, value]) => {
+
+                    const detailLine = document.createElement("div");
+
+                    const strong = document.createElement("strong");
+                    strong.textContent = label + ": ";
+
+                    const span = document.createElement("span");
+                    span.textContent =
+                        value !== null && value !== undefined
+                            ? String(value)
+                            : "Not available";
+
+                    detailLine.append(strong, span);
+                    extraDetails.appendChild(detailLine);
+
+                });
+
+                detailsBtn.addEventListener("click", () => {
+
+                    const isOpen =
+                        extraDetails.classList.toggle("show");
+
+                    detailsBtn.textContent = isOpen
+                        ? "Hide Details"
+                        : "View Details";
+
+                });
+
+                card.append(
+                    title,
+                    description,
+                    location,
+                    badge,
+                    amount,
+                    progress,
+                    percentageText,
+                    detailsBtn,
+                    extraDetails
+                );
+
+                campaignList.appendChild(card);
+
+            });
+
+        } catch (error) {
+
+            console.error("Campaign loading error:", error);
+
+            campaignCount.textContent = "Campaign loading failed";
+
+            campaignList.innerHTML = "";
+
+            const message = document.createElement("div");
+            message.className = "message";
+            message.textContent = error.message;
+
+            campaignList.appendChild(message);
+
+        } finally {
+
+            refreshBtn.disabled = false;
+            refreshBtn.textContent = "↻ Refresh Campaigns";
+
+        }
+
+    }
+
+    // Load campaigns when the page opens.
+    loadCampaigns();
+
+    // Automatically refresh campaign data every 15 seconds.
+    setInterval(loadCampaigns, 15000);
+
+</script>
+
+</body>
+</html>
